@@ -1,0 +1,24 @@
+version: 1
+project: {{PROJECT_NAME_YAML}}
+
+# interaction controls how the agent explains and discusses decisions.
+# values: coach | collaborate | fast
+interaction: {{INTERACTION}}
+
+# rigor controls the amount of engineering evidence required.
+# values: light | standard | strict
+rigor: {{RIGOR}}
+
+# git_checkpoints controls durable Git audit/recovery checkpoints.
+# values: off | strict-only | always
+git_checkpoints: {{GIT_CHECKPOINTS}}
+
+artifacts:
+  root: .sdlc
+  tasks: .sdlc/tasks
+  decisions: .sdlc/decisions
+
+workflow:
+  discussion_first: true
+  require_user_confirmation_for_product_decisions: true
+  unresolved_marker: "<!-- 待讨论 -->"
