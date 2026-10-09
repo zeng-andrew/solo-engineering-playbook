@@ -42,3 +42,12 @@
 5. 用一个真实但低风险需求测试：agent 是否先读上下文、每轮只问少量高价值问题，并在确认后才形成 intent。
 
 最后一项是行为验证，无法由目录结构检查替代。仓库提供了 `tests/scenarios/ambiguous-feature.md` 作为可重复执行的最小场景。不同 agent 对 skill 自动发现和触发的机制不同，应以其官方说明和实际冒烟结果为准。
+
+## 自动触发的 frontmatter 契约
+
+核心 skill 的 frontmatter 只携带两类触发信息：
+
+- `description`：一句概括，供所有支持 skill 的 agent 做路由判断，必须保持简短，因为部分 agent 会在列表中截断它。
+- `whenToUse`：显式触发条件（中英文触发词、适用与排除场景）。Kimi Code 等 agent 用它做自动调用判断；不识别该字段的 agent 会忽略它，不影响兼容性。
+
+调整触发行为时只改这两个字段，不在 frontmatter 中加入 agent 专属配置；新增触发词需同步扩展 `tests/test_workflow.py` 中的 frontmatter 测试。

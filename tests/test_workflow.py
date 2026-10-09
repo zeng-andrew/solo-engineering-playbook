@@ -201,7 +201,15 @@ class SkillPackageTests(unittest.TestCase):
         self.assertIsNotNone(match)
         frontmatter = match.group(1)
         self.assertRegex(frontmatter, r"(?m)^name: solo-engineering-coach$")
-        self.assertRegex(frontmatter, r"(?m)^description: .+")
+        description = re.search(r"(?m)^description: (.+)$", frontmatter)
+        self.assertIsNotNone(description)
+        self.assertLessEqual(
+            len(description.group(1)), 240, "description 过长会在 agent 列表中被截断"
+        )
+        when_to_use = re.search(r"(?m)^whenToUse: (.+)$", frontmatter)
+        self.assertIsNotNone(when_to_use, "whenToUse 是自动触发的主要路由信号")
+        for trigger in ("intent", "SDLC", "需求澄清", "交付工件"):
+            self.assertIn(trigger, when_to_use.group(1))
 
     def test_all_local_markdown_links_resolve(self) -> None:
         checked = 0

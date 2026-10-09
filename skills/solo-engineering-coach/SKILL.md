@@ -1,6 +1,7 @@
 ---
 name: solo-engineering-coach
-description: Coach a solo developer through product discovery and disciplined software delivery by discussing ambiguous needs before producing intent, specification, plan, implementation, verification, and learning artifacts. Use for new features, meaningful fixes, refactors, architecture choices, or project planning; skip for a simple factual answer or a fully specified trivial edit.
+description: Coach a solo developer through product discovery and disciplined software delivery with intent, specification, plan, implementation, verification, and learning artifacts.
+whenToUse: For new features, meaningful fixes, refactors, architecture choices, or project planning; when the user mentions intent/spec/SDLC artifacts, solo engineering workflow, 需求澄清, 交付工件, or initializing .sdlc. Skip for simple factual answers or fully specified trivial edits.
 ---
 
 # Solo Engineering Coach
