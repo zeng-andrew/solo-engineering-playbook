@@ -66,11 +66,21 @@
 
 避免“实现后端”“添加测试”这类无法执行的阶段标题。计划是当前最佳路径，不是承诺；证据变化时更新并记录原因。
 
+当变更涉及替换、删除、迁移或弃用既有结构时，plan 还必须给出**退役清单**：哪些旧实现、入口、配置或分支应在本次完成后消失、调用方迁往哪里；延期退役的每一项必须指向一个被追踪的后续工作项，不接受口头”以后再删”。结构迁移类改动附预期最终结构简图。这份清单是 Verify 阶段结构审查的应然基线。
+
+当 plan 引入或修改状态所有权、生命周期或数据流，或方案依赖 fallback / retry / repair 链维持正确性时，进入 Implement 前必须执行 `design-review` 并将结论（PASS / FAIL、审查范围与 open questions）记入 plan：FAIL 的 Required redesign 未落回 plan 之前，不得开始实现。`standard` 命中上述情形时同样必审；`strict` 涉及新模块、并发/队列或外部边界的 plan 一律必审；`light` 不强制。Verify 阶段不重跑全量设计审查——structural-change-review 发现防御机制在补偿内部不确定性（点不出具名外部消费者或契约）时，标注转交 `design-review` 复审，该项的修复方向是重设计而非清理。
+
+当命中上述任一风险条件，或改动涉及规模敏感路径、数据完整性不变量时，进入 Implement 前在同关口执行 `test-design-review`：三档验证目标清单（Critical validation / Lower priority / No need to constrain）记入 plan，作为各步骤对应测试与检查的应然基线；其中 Critical 档升格进 spec 的验收标准并注明来源，其余两档留在 plan 作工程参考，No need to constrain 档用于防止测试冻结实现细节。`standard` 命中必做；`strict` 涉及新模块、并发/队列或外部边界一律必做；`light` 不强制。
+
 ## `verification.md`：凭什么说完成
 
-将每条验收标准映射到证据：自动化测试、命令输出、人工检查或监控信号。记录命令、环境、结果和未覆盖风险。失败结果也要记录，随后注明修复和复测证据。
+将每条验收标准映射到证据：自动化测试、命令输出、人工检查或监控信号。记录命令、环境、结果和未覆盖风险，并记录范围决策——实际执行了哪些测试、依据什么判断充分、刻意未跑什么，不默认全量回归。失败结果也要记录：每条先注明修复前的归属判断（生产代码 / 测试代码 / 需求已变 / 环境 / 非确定 / 证据不足）及其裁决依据，随后注明修复和复测证据；不接受把 expected 改成实际输出式的闭环。
 
-`strict` 工作项还应覆盖相关的失败注入、权限边界、迁移/回滚演练、兼容窗口或生产观察计划。
+`strict` 工作项还应覆盖相关的失败注入、权限边界、迁移/回滚演练、兼容窗口或生产观察计划，并在逐条映射之外补一条整体充分性判断：各增量验证范围合并后是否覆盖整个变更的风险面，未覆盖处点名。
+
+涉及替换、删除、迁移或弃用的工作项，verification 必须包含 `structural-change-review` 的结论（PASS / FAIL、审查范围与 open questions），作为阻塞性证据：FAIL 的 Required cleanup 未清完之前，状态不得置为 `verified`；延期项必须指向被追踪的后续工作项。`standard` 在 spec / plan 含替换、删除或迁移时同样适用；`strict` 结构类变更必审。bug fix 与新增抽象按比例至少覆盖其补丁式修复与概念增生检查。
+
+本次工作项新增或修改过测试时，在 `structural-change-review` 之后执行 `test-suite-maintenance`，Keep / Remove / Merge 结论记入 verification；它让测试资产保持新鲜，不作为阻塞性证据。
 
 ## 决策记录
 
