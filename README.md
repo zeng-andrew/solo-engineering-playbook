@@ -80,6 +80,6 @@ python -m compileall -q skills/solo-engineering-coach/scripts scripts
 
 ## 版本边界
 
-v0.1 提供的是可移植的交互协议、文档契约和本地文件工具。它不会自动调用 issue tracker、CI、云服务或多个 agent，也不会替你决定尚未确认的产品问题。具体 code agent 是否自动发现 skill，取决于该 agent 自己的加载机制。
+v0.2 在 v0.1 的可移植交互协议、文档契约和本地文件工具之上，把审查类 skill 接入流程关口：Plan 阶段的退役清单与 design-review / test-design-review 门禁、Implement 阶段的测试范围规划与失败归属判断、Verify 阶段的 structural-change-review 阻塞证据与测试套件维护；frontmatter 增加显式的 `whenToUse` 触发契约以适配不同 agent 的 skill 路由机制。它仍然不会自动调用 issue tracker、CI、云服务或多个 agent，也不会替你决定尚未确认的产品问题。具体 code agent 是否自动发现 skill，取决于该 agent 自己的加载机制。
 
 迁移到新 agent 后，除运行脚本测试外，还应按 [`tests/scenarios/ambiguous-feature.md`](tests/scenarios/ambiguous-feature.md) 做一次对话冒烟测试；需要 Git 门禁时再执行 [`tests/scenarios/strict-git-checkpoints.md`](tests/scenarios/strict-git-checkpoints.md)。目录结构正确不等于交互行为正确。
